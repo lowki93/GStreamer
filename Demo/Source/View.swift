@@ -33,8 +33,8 @@ class View:UIViewController {
     override func loadView() {
         let view:ViewContent = ViewContent()
         view.backgroundColor = UIColor.white
-        view.segmented.addTarget(self, action:#selector(self.selector(segmented:)), for:UIControlEvents.valueChanged)
-        view.slider.addTarget(self, action:#selector(self.selector(slider:)), for:UIControlEvents.valueChanged)
+        view.segmented.addTarget(self, action:#selector(self.selector(segmented:)), for:.valueChanged)
+        view.slider.addTarget(self, action:#selector(self.selector(slider:)), for:.valueChanged)
         self.viewContent = view
         self.view = view
     }

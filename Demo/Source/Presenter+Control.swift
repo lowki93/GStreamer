@@ -2,59 +2,59 @@ import Foundation
 
 extension Presenter {
     func setPlay(list:[String]) {
-        self.player.addToPlay(list:list)
+      guard let string = list.first else { return }
+      dump("=== START")
+      player.load(url: string)
+//      player.load(url: <#T##String#>)(url: string)
+//        self.player.addToPlay(list:list)
     }
     
     func clearPlayList() {
-        self.player.clearList()
+//        self.player.clearList()
     }
     
     @objc func play() {
-        do {
-            try self.player.play()
-        } catch let error {
-            self.showAlert(message:error.localizedDescription)
-        }
+      dump("=== action Play")
+      player.play()
     }
     
     @objc func pause() {
-        do {
-            try self.player.pause()
-        } catch let error {
-            self.showAlert(message:error.localizedDescription)
-        }
+      dump("=== pause")
+      player.pause()
     }
     
     @objc func stop() {
-        self.view?.viewContent.segmented.selectedSegmentIndex = 0
-        do {
-            try self.player.stop()
-        } catch let error {
-            self.showAlert(message:error.localizedDescription)
-        }
+      player.stop()
     }
-    
-    @objc func next() {
-        do {
-            try self.player.next()
-        } catch let error {
-            self.showAlert(message:error.localizedDescription)
-        }
-    }
-    
-    @objc func previous() {
-        do {
-            try self.player.previous()
-        } catch let error {
-            self.showAlert(message:error.localizedDescription)
-        }
-    }
+
+  func currentPosition() -> Double {
+    let t = player.currentPosition
+    dump("=== Current Position: \(t)")
+    return t
+  }
+
+  @objc func rate2() {
+    player.rate(2)
+  }
+  @objc func rate1() {
+    player.rate(1)
+  }
     
     func seek(seconds:Float) {
-        do {
-            try self.player.seek(seconds:seconds)
-        } catch let error {
-            self.showAlert(message:error.localizedDescription)
-        }
+      player.seek(to: TimeInterval(seconds))
     }
+
+  func fastBackward() {
+    relativeSeek(advancedBy: -5)
+  }
+
+  func fastForward() {
+    relativeSeek(advancedBy: 5)
+  }
+
+  private func relativeSeek(advancedBy interval: Float) {
+    let position = min(max(Float(player.currentPosition) + interval, 0), mediaDuration)
+    dump("=== FAST SEEK: \(position)")
+    player.seek(to: TimeInterval(position))
+  }
 }

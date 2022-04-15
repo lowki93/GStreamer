@@ -9,17 +9,17 @@ class ViewToolbar {
     private(set) var items:[UIBarButtonItem]!
     
     init(presenter:Presenter) {
-        let play:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:UIBarButtonSystemItem.play, target:presenter,
+      let play:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:.play, target:presenter,
                                                    action:#selector(presenter.play))
-        let stop:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:UIBarButtonSystemItem.stop, target:presenter,
+        let stop:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:.stop, target:presenter,
                                                    action:#selector(presenter.stop))
-        let pause:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:UIBarButtonSystemItem.pause, target:presenter,
+        let pause:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:.pause, target:presenter,
                                                     action:#selector(presenter.pause))
-        let next:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:UIBarButtonSystemItem.fastForward,
-                                                   target:presenter, action:#selector(presenter.next))
-        let previous:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:UIBarButtonSystemItem.rewind,
-                                                       target:presenter, action:#selector(presenter.previous))
-        let space:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:UIBarButtonSystemItem.flexibleSpace,
+        let next:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:.fastForward,
+                                                   target:presenter, action:#selector(presenter.rate2))
+        let previous:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:.rewind,
+                                                       target:presenter, action:#selector(presenter.rate1))
+        let space:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:.flexibleSpace,
                                                             target:nil, action:nil)
         self.items = [previous, space, pause, space, stop, space, play, space, next]
         self.buttonPlay = play

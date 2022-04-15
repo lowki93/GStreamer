@@ -494,7 +494,7 @@ GST_PLUGIN_STATIC_DECLARE(rtspclientsink);
 
 #if defined(GST_IOS_GIO_MODULE_GNUTLS)
 #include <gio/gio.h>
-GST_G_IO_MODULE_DECLARE(gnutls);
+GST_G_IO_MODULE_DECLARE(gnutls);  
 #endif
 
 void GstreamerConfiguration (void)
