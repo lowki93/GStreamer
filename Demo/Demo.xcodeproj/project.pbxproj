@@ -359,8 +359,13 @@
 		DA138DE520E0FC2600A47DAE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					x86_64,
+				);
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3LBE9NZPCG;
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				INFOPLIST_FILE = Configuration/source.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -378,6 +383,10 @@
 		DA138DE620E0FC2600A47DAE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					x86_64,
+				);
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3LBE9NZPCG;
 				INFOPLIST_FILE = Configuration/source.plist;

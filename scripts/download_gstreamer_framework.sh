@@ -1,6 +1,7 @@
 #!/bin/sh
 
 VERSION=1.14.2
+# VERSION=1.20.1
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
