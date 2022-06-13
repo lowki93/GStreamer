@@ -492,10 +492,10 @@ GST_PLUGIN_STATIC_DECLARE(srtp);
 GST_PLUGIN_STATIC_DECLARE(rtspclientsink);
 #endif
 
-#if defined(GST_IOS_GIO_MODULE_GNUTLS)
-#include <gio/gio.h>
-GST_G_IO_MODULE_DECLARE(gnutls);  
-#endif
+//#if defined(GST_IOS_GIO_MODULE_GNUTLS)
+//#include <gio/gio.h>
+//GST_G_IO_MODULE_DECLARE(gnutls);
+//#endif
 
 void GstreamerConfiguration (void)
 {
@@ -922,9 +922,6 @@ void GstreamerConfiguration (void)
 #if defined(GST_IOS_PLUGIN_ADPCMENC) || defined(GST_IOS_PLUGINS_CODECS)
     GST_PLUGIN_STATIC_REGISTER(adpcmenc);
 #endif
-#if defined(GST_IOS_PLUGIN_DASHDEMUX) || defined(GST_IOS_PLUGINS_CODECS)
-    GST_PLUGIN_STATIC_REGISTER(dashdemux);
-#endif
 #if defined(GST_IOS_PLUGIN_DVBSUBOVERLAY) || defined(GST_IOS_PLUGINS_CODECS)
     GST_PLUGIN_STATIC_REGISTER(dvbsuboverlay);
 #endif
@@ -1019,9 +1016,9 @@ void GstreamerConfiguration (void)
     GST_PLUGIN_STATIC_REGISTER(rtspclientsink);
 #endif
     
-#if defined(GST_IOS_GIO_MODULE_GNUTLS)
-    GST_G_IO_MODULE_LOAD(gnutls);
-#endif
+//#if defined(GST_IOS_GIO_MODULE_GNUTLS)
+//    GST_G_IO_MODULE_LOAD(gnutls);
+//#endif
     
 #if USE_AVFASSETSRC
     /* Lower the ranks of filesrc and giosrc so iosavassetsrc is

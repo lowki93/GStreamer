@@ -20,8 +20,17 @@ static double nanoSecondsToSeconds = 1000000000;
   return self;
 }
 
+//- (void)dealloc {
+//  NSLog(@"=== DEALLOC");
+//  monoPlayer = NULL;
+//}
+
 -(double)currentPosition {
   return gst_player_get_position(monoPlayer) / nanoSecondsToSeconds;
+}
+
+-(double)duration {
+  return gst_player_get_duration(monoPlayer) / nanoSecondsToSeconds;
 }
 
 -(double)rate {
@@ -46,7 +55,6 @@ static double nanoSecondsToSeconds = 1000000000;
 
 - (void)loadWithUrl:(NSString * _Nonnull)url {
   gst_player_set_uri(monoPlayer, [url cStringUsingEncoding:NSASCIIStringEncoding]);
-  [monoDelegate didReady];
 }
 
 -(void)stop {
@@ -64,8 +72,8 @@ static double nanoSecondsToSeconds = 1000000000;
 -(void)configurePlayer {
   GstreamerConfiguration();
   // DEBUG Level
-  //    gst_debug_set_threshold_for_name(kGstPlayer, GST_LEVEL_ERROR);
-  //    gst_debug_set_threshold_from_string("play*:9,decodebin:9,filescrc:9", YES);
+//      gst_debug_set_threshold_for_name(kGstPlayer, GST_LEVEL_ERROR);
+//      gst_debug_set_threshold_from_string("play*:9,decodebin:9,filescrc:9", YES);
   monoPlayer = gst_player_new(NULL, NULL);
   gst_player_config_set_seek_accurate(gst_player_get_config(monoPlayer), true);
   [self configureCallBacks];
@@ -79,6 +87,8 @@ static double nanoSecondsToSeconds = 1000000000;
   g_signal_connect(monoPlayer, kStateChanged, G_CALLBACK(stateChangedCallback), NULL);
   g_signal_connect(monoPlayer, kError, G_CALLBACK(errorCallback), NULL);
   g_signal_connect(monoPlayer, kSeekDone, G_CALLBACK(seekDoneCallback), NULL);
+  g_signal_connect(monoPlayer, kBuffering, G_CALLBACK(bufferingCallback), NULL);
+  g_signal_connect(monoPlayer, kUriLoader, G_CALLBACK(uriLoadedCallback), NULL);
 }
 
 void positionCallback(void *player, long time, void *data) {
@@ -103,7 +113,7 @@ void stateChangedCallback(void *player, GstPlayerState state, void *data) {
       [monoDelegate didFinish];
       break;
     case GST_PLAYER_STATE_BUFFERING:
-      [monoDelegate didLoading];
+//      [monoDelegate didLoading];
       break;
     case GST_PLAYER_STATE_PAUSED:
       [monoDelegate didPaused];
@@ -122,7 +132,15 @@ void errorCallback(void *player, GError *error, void *data) {
   [monoDelegate foundErrorWithMessage:[[NSString alloc] initWithUTF8String:error->message] code:(long)(error->code)];
 }
 
-//static char *const kGstPlayer = "gst-player";
+void bufferingCallback(void *player, int *object, void *data) {
+  [monoDelegate didLoading];
+}
+
+void uriLoadedCallback(void *player, char *object, void *data) {
+  [monoDelegate didReady];
+}
+
+static char *const kGstPlayer = "gst-player";
 static char *const kPositionUpdated = "position-updated";
 static char *const kDurationChanged = "duration-changed";
 //static char *const kEndOfStream = "end-of-stream";
@@ -130,5 +148,8 @@ static char *const kInfoUpdated = "media-info-updated";
 static char *const kStateChanged = "state-changed";
 static char *const kError = "error";
 static char *const kSeekDone = "seek-done";
+static char *const kUriLoader = "uri-loaded";
+// TESTING
+static char *const kBuffering = "buffering";
 
 @end

@@ -5,7 +5,7 @@
 import Foundation
 
 public enum GStreamPlayerStatus {
-  case initialize
+  case initializing
   case ready
   case playing
   case paused

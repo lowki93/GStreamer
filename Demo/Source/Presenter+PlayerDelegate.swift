@@ -4,30 +4,36 @@ import MediaPlayer
 import AVFoundation
 
 extension Presenter: GStreamPlayerDelegate {
+  func didReceivedError(message: String, code: Int) {}
 
-  func update(position: Float) {
+  func didFinishSeeking(at position: Double) {}
+
+  func  didUpdatePosition(_ position: Double) {
     DispatchQueue.main.async {
-      self.viewModel.sliderValue = position
+      self.viewModel.sliderValue = Float(position)
       self.viewModel.currentTime = self.timeFrom(seconds: position)
     }
   }
 
-  func duration(seconds: Float) {
-    self.nowPlayingInfoCenter.nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = CMTime(seconds: Double(seconds), preferredTimescale: 1000).seconds
+  func didReceiveDuration(_ duration: Double){
+    dump("=== duration received - \(duration)")
+    self.nowPlayingInfoCenter.nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = CMTime(seconds: duration, preferredTimescale: 1000).seconds
     DispatchQueue.main.async {
-      self.mediaDuration = seconds
-      self.viewModel.sliderMaxValue = seconds
-      self.viewModel.currentDuration = self.timeFrom(seconds:seconds)
+      self.mediaDuration = Float(duration)
+      self.viewModel.sliderMaxValue = Float(duration)
+      self.viewModel.currentDuration = self.timeFrom(seconds: duration)
     }
   }
 
   func didChangeStatus(_ status: GStreamPlayerStatus) {
+    dump("=== STATUS - \(status)")
+    dump("=== \(player.duration)")
     switch status {
-    case .initialize:
+    case .initializing:
       break
     case .ready:
       self.playerReady()
-      self.play()
+//      self.play()
     case .playing:
       self.playerPlaying()
     case .paused:
@@ -99,9 +105,9 @@ extension Presenter: GStreamPlayerDelegate {
     }
   }
 
-  private func timeFrom(seconds:Float) -> String {
+  private func timeFrom(seconds: Double) -> String {
       let minutes:Int = Int(seconds) / 60 % 60
-      let seconds:Float = seconds.truncatingRemainder(dividingBy:60)
+    let seconds:Float = Float(seconds.truncatingRemainder(dividingBy: 60))
       return String(format:"%02i:%05.2f", minutes, seconds)
   }
 

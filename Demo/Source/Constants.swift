@@ -2,7 +2,7 @@ import Foundation
 
 struct Constants {
     static let local:String = "guitars.m4a"
-    static let remote:[String] = ["https://audiostreams.superaudio.dev/testsiOS/transcript.ogg"]
+    static let remote:[String] = ["https://audiostreams.superaudio.dev/testsiOS/5mins-2.ogg"]
 //      "http://tchakabam.com/test-media/m4a/shalafon.mp3",
 //                                "http://tchakabam.com/test-media/m4a/Theo Katzman - Heartbreak Hits - 08 As the Romans Do.mp3",
 //                                "http://tchakabam.com/test-media/m4a/guitars.m4a"]

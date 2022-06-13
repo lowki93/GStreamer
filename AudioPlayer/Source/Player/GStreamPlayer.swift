@@ -10,25 +10,21 @@ import AVFoundation
 public protocol GStreamPlayerDelegate: AnyObject {
 
   func didChangeStatus(_ status: GStreamPlayerStatus)
-  func update(position: Float)
-  func duration(seconds: Float)
-
+  func didUpdatePosition(_ position: Double)
+  func didReceivedError(message: String, code: Int)
+  func didReceiveDuration(_ duration: Double)
+  func didFinishSeeking(at position: Double)
 }
 
 public class GStreamPlayer {
 
   private let player: PlayerProvider
   public weak var delegate: GStreamPlayerDelegate?
-  private var status: GStreamPlayerStatus = .initialize {
-    didSet {
-      guard status != oldValue else { return }
-      delegate?.didChangeStatus(status)
-    }
-  }
-  private var playerPosition: Float = 0
-  private var isSeeking = false
   public var currentPosition: Double {
-    return Double(playerPosition)
+    return player.currentPosition
+  }
+  public var duration: Double {
+    return player.duration
   }
   public var rate: Double {
     return player.rate
@@ -45,24 +41,17 @@ public class GStreamPlayer {
 
   public func play() {
     player.play()
-    status = .playing
   }
 
   public func pause() {
     player.pause()
-    status = .paused
   }
 
   public func stop() {
     player.stop()
-    status = .finished
   }
 
   public func seek(to seconds: TimeInterval) {
-    guard !isSeeking else { return }
-    dump("============ SEEK TO - \(seconds)")
-    isSeeking = true
-    playerPosition = Float(seconds)
     player.seek(to: seconds)
   }
 
@@ -75,15 +64,11 @@ public class GStreamPlayer {
 extension GStreamPlayer: PlayerProviderDelegate {
 
   func positionCallback(time: Float) {
-    guard !isSeeking else { return }
-    playerPosition = max(playerPosition, time)
-    dump("=== POSITION - \(playerPosition) - \(time)")
-
-    delegate?.update(position: playerPosition)
+    delegate?.didUpdatePosition(Double(time))
   }
 
   func durationCallback(time: Float) {
-    delegate?.duration(seconds: time)
+    delegate?.didReceiveDuration(Double(time))
   }
 
   func playingUpdated(url: String) {
@@ -91,32 +76,31 @@ extension GStreamPlayer: PlayerProviderDelegate {
   }
 
   func foundError(message: String, code: Int) {
-
+    delegate?.didReceivedError(message: message, code: code)
   }
 
   func didReady() {
-    status = .ready
+    delegate?.didChangeStatus(.ready)
   }
 
   func didFinish() {
-    status = .finished
+    delegate?.didChangeStatus(.finished)
   }
 
   func didLoading() {
-    status = .loading
+    delegate?.didChangeStatus(.loading)
   }
 
   func didPaused() {
-    status = .paused
+    delegate?.didChangeStatus(.paused)
   }
 
   func didPlaying() {
-    status = .playing
+    delegate?.didChangeStatus(.playing)
   }
 
   func seekDone(time: Float) {
-    dump("============ SEEK SUCCESS - \(time)")
-    isSeeking = false
+    delegate?.didFinishSeeking(at: Double(time))
   }
 
 }

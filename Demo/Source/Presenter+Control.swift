@@ -3,7 +3,6 @@ import Foundation
 extension Presenter {
     func setPlay(list:[String]) {
       guard let string = list.first else { return }
-      dump("=== START")
       player.load(url: string)
 //      player.load(url: <#T##String#>)(url: string)
 //        self.player.addToPlay(list:list)
@@ -19,7 +18,6 @@ extension Presenter {
     }
     
     @objc func pause() {
-      dump("=== pause")
       player.pause()
     }
     
@@ -29,7 +27,6 @@ extension Presenter {
 
   func currentPosition() -> Double {
     let t = player.currentPosition
-    dump("=== Current Position: \(t)")
     return t
   }
 
@@ -54,7 +51,6 @@ extension Presenter {
 
   private func relativeSeek(advancedBy interval: Float) {
     let position = min(max(Float(player.currentPosition) + interval, 0), mediaDuration)
-    dump("=== FAST SEEK: \(position)")
     player.seek(to: TimeInterval(position))
   }
 }

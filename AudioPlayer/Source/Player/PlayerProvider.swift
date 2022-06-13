@@ -9,6 +9,7 @@ import Foundation
   var delegate: PlayerProviderDelegate? { get set }
   var currentPosition: Double { get }
   var rate: Double { get }
+  var duration: Double { get }
 
   func load(url: String)
   func play()
